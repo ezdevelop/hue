@@ -422,7 +422,7 @@ ${ dashboard.layout_skeleton() }
                 <!-- ko if: ! $data.selected -->
                   <a class="exclude pointer" data-bind="click: function(){ $root.query.toggleFacet({facet: $data, widget_id: $parent.id(), 'exclude': true}) }" title="${ _('Exclude this value') }"><i class="fa fa-minus"></i></a>
                   <div class="hellip">
-                    <a class="pointer" data-bind="text: $data.value, click: function(){ $root.query.toggleFacet({facet: $data, widget_id: $parent.id()}) }, attr: {'title': $data.value + ' (' + $data.count + ')'}"></a>
+                    <a class="pointer" data-bind="html: prettifyDate($data.value), click: function(){ $root.query.toggleFacet({facet: $data, widget_id: $parent.id()}) }, attr: {'title': $data.value + ' (' + $data.count + ')'}"></a>
                     <span class="pointer counter" data-bind="text: ' (' + $data.count + ')', click: function(){ $root.query.toggleFacet({facet: $data, widget_id: $parent.id()}) }"></span>
                   </div>
                 <!-- /ko -->
@@ -431,7 +431,7 @@ ${ dashboard.layout_skeleton() }
                     <a class="include pointer" data-bind="visible: ! exclude"><i class="fa fa-times"></i></a>
                     <a class="include pointer" data-bind="visible: exclude"><i class="fa fa-plus"></i></a>
                     <div class="hellip">
-                      <strong data-bind="text: $data.value"></strong>
+                      <strong data-bind="html: prettifyDate($data.value)"></strong>
                     </div>
                   </span>
                 <!-- /ko -->
@@ -461,7 +461,7 @@ ${ dashboard.layout_skeleton() }
               <!-- ko if: ! selected -->
                 <a class="exclude pointer" data-bind="click: function(){ $root.query.selectRangeFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, 'exclude': true}) }" title="${ _('Exclude this value') }"><i class="fa fa-minus"></i></a>
                 <div class="hellip">
-                  <a class="pointer" data-bind="text: $data.is_single_unit_gap ? $data.from : $data.from + ' - ' + $data.to, click: function(){ $root.query.selectRangeFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field}) }, attr: {'title': ($data.is_single_unit_gap ? $data.from : $data.from + ' - ' + $data.to) + ' (' + $data.value + ')'}"></a>
+                  <a class="pointer" data-bind="html: $data.is_single_unit_gap ? prettifyDate($data.from, $parent) : prettifyDateRange($data.from, $data.to, $parent, false), click: function(){ $root.query.selectRangeFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field}) }, attr: {'title': ($data.is_single_unit_gap ? $data.from : $data.from + ' - ' + $data.to) + ' (' + $data.value + ')'}"></a>
                   <span class="pointer counter" data-bind="text: ' (' + $data.value + ')', click: function(){ $root.query.selectRangeFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field}) }"></span>
                 </div>
               <!-- /ko -->
@@ -470,7 +470,7 @@ ${ dashboard.layout_skeleton() }
                   <a class="include pointer" data-bind="visible: ! exclude"><i class="fa fa-times"></i></a>
                   <a class="include pointer" data-bind="visible: exclude"><i class="fa fa-plus"></i></a>
                   <div class="hellip">
-                    <strong data-bind="text: $data.is_single_unit_gap ? $data.from : $data.from + ' - ' + $data.to"></strong>
+                    <strong data-bind="html: $data.is_single_unit_gap ? prettifyDate($data.from, $parent) : prettifyDateRange($data.from, $data.to, $parent, false), attr: {'title': ($data.is_single_unit_gap ? $data.from : $data.from + ' - ' + $data.to) + ' (' + $data.value + ')'}"></strong>
                   </div>
                 </span>
               <!-- /ko -->
@@ -483,7 +483,7 @@ ${ dashboard.layout_skeleton() }
               <!-- ko if: ! selected -->
                 <a class="exclude pointer" data-bind="click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, 'exclude': true, is_up: $data.is_up}) }" title="${ _('Exclude this value') }"><i class="fa fa-minus"></i></a>
                 <div class="hellip">
-                  <a class="pointer" data-bind="text: $data.from + ($data.is_up ? ' & Up' : ' & Less'), click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }, attr: {'title': $data.from + ($data.is_up ? ' & Up' : ' & Less') + ' (' + $data.total_counts + ')'}"></a>
+                  <a class="pointer" data-bind="html: prettifyDate($data.from, $parent) + ($data.is_up ? ' & Up' : ' & Less'), click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }, attr: {'title': $data.from + ($data.is_up ? ' & Up' : ' & Less') + ' (' + $data.total_counts + ')'}"></a>
                   <span class="pointer counter" data-bind="text: ' (' + $data.total_counts + ')', click: function(){ $root.query.selectRangeUpFacet({count: $data.value, widget_id: $parent.id(), from: $data.from, to: $data.to, cat: $data.field, is_up: $data.is_up}) }"></span>
                 </div>
               <!-- /ko -->
@@ -492,7 +492,7 @@ ${ dashboard.layout_skeleton() }
                   <a class="include pointer" data-bind="visible: ! exclude"><i class="fa fa-times"></i></a>
                   <a class="include pointer" data-bind="visible: exclude"><i class="fa fa-plus"></i></a>
                   <div class="hellip">
-                    <strong data-bind="text: $data.from + ($data.is_up ? ' & Up' : ' & Less')"></strong>
+                    <strong data-bind="html: prettifyDate($data.from, $parent) + ($data.is_up ? ' & Up' : ' & Less')"></strong>
                   </div>
                 </span>
               <!-- /ko -->
@@ -1301,13 +1301,12 @@ ${ dashboard.layout_skeleton() }
           <!-- ko if: $.grep($parent.filter(), function(f) { return f.value() == $data.from() && ! f.exclude() }).length > 0 -->
           <span class="label label-info">
             <!-- ko if: $parent.type() == 'range' -->
-              <strong>${_('from')}</strong> <span data-bind="text: $data.from"></span>
-              <strong>${_('to')}</strong> <span data-bind="text: $data.to"></span>
+                <span data-bind="html: prettifyDateRange($data.from(), $data.to(), null, true)"></span>
             <!-- /ko -->
 
             <!-- ko if: $parent.type() == 'range-up' -->
               <strong data-bind="visible: ! $parent.is_up()">${ _('Until') }</strong>
-              <span data-bind="text: $data.from"></span>
+              <span data-bind="html: prettifyDate($data.from())"></span>
               <strong data-bind="visible: $parent.is_up()"> & Up</strong>
             <!-- /ko -->
           </span>
@@ -1318,8 +1317,7 @@ ${ dashboard.layout_skeleton() }
         <span data-bind="foreach: $data.properties" style="font-weight: normal" class="excluded">
           <!-- ko if: $.grep($parent.filter(), function(f) { return f.value() == $data.from() && f.exclude() }).length > 0 -->
           <span class="label label-important">
-            <strong>${_('from')}</strong> <span data-bind="text: $data.from"></span>
-            <strong>${_('to')}</strong> <span data-bind="text: $data.to"></span>
+            <span data-bind="html: prettifyDateRange($data.from(), $data.to(), null, true)"></span>
           </span>
           <!-- /ko -->
         </span>
@@ -1771,6 +1769,53 @@ function getHitOption(value){
   }
   return '';
 }
+
+function prettifyDate(from, widget) {
+  if ($.isNumeric(from)) {
+    return from;
+  }
+  var _mFrom = moment(from);
+  if (_mFrom.isValid()) {
+    var _format = "YYYY-MM-DD HH:mm:ss";
+    var _minMaxDiff = 0;
+    if (widget && widget.properties && widget.properties.min && widget.properties.min()) {
+      _minMaxDiff = moment(widget.properties.max()).diff(moment(widget.properties.min()), 'seconds');
+    }
+    if (_minMaxDiff > 0 && _minMaxDiff <= 86400) { // max 1 day
+      _format = "HH:mm:ss";
+    }
+    return "<i class='fa fa-clock-o'></i> " + _mFrom.utc().format(_format);
+  }
+  else {
+    return from;
+  }
+}
+
+function prettifyDateRange(from, to, widget, withCommon) {
+  if ($.isNumeric(from)) {
+    return from + " - " + to;
+  }
+  var _mFrom = moment(from);
+  var _mTo = moment(to);
+  if (_mFrom.isValid() && _mTo.isValid()) {
+    var _minMaxDiff = moment(to).diff(moment(from), 'seconds');
+    var _format = "YYYY-MM-DD HH:mm:ss";
+    var _common = "";
+    var _common = "";
+    if (widget && widget.properties && widget.properties.min && widget.properties.min()) {
+      _minMaxDiff = moment(widget.properties.max()).diff(moment(widget.properties.min()), 'seconds');
+    }
+    if (_minMaxDiff <= 86400) { // max 1 day
+      _common = "YYYY-MM-DD ";
+      _format = "HH:mm:ss";
+    }
+    return ((_common != "" && withCommon) ? "<i class='fa fa-calendar'></i> " + _mFrom.utc().format(_common) + "&nbsp;" : "") + " <i class='fa fa-clock-o'></i> " + _mFrom.utc().format(_format) + " <i class='fa fa-long-arrow-right'></i> " + _mTo.utc().format(_format);
+  }
+  else {
+    return from + " - " + to;
+  }
+}
+
 
 var lastWindowScrollPosition = 0;
 
